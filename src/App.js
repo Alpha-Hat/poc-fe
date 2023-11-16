@@ -53,8 +53,25 @@ function SituationOutput({note})  {
 
 export default function App () {
   
-    const [note, setNote] = useState('');
-    const [posts, setPosts] = useState([]);
+  const [note, setNote] = useState('');
+  const [posts, setPosts] = useState([]);
+    
+  const [showResult, setShowResult] = useState(false);
+  const [apiMessage, setApiMessage] = useState("");
+  
+  const getApiMessage = async () => {
+
+    console.log(process.env.REACT_APP_ENDPOINT);
+    const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, {
+      mode: 'cors'
+    });
+    
+    const responseData = await response.text();
+    console.log(responseData)
+
+    setShowResult(true);
+    setApiMessage(responseData);  
+  };
     
     return (
     <div className="App">
@@ -82,6 +99,7 @@ export default function App () {
       <SituationOutput 
         note = {note}
         />
+        <button onClick={getApiMessage}>Call Lambda</button>
     </div>
   );
 }
