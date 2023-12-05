@@ -7,6 +7,7 @@ frontend:
     build:
       commands:
         - echo "REACT_APP_ENDPOINT=$ENDPOINT" >> .env 
+        - echo $secretfile >> ./src/aws-exports.js
         - npm run build
   artifacts:
     baseDirectory: build
