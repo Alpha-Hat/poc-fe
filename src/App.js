@@ -35,7 +35,7 @@ function AddSituation ({note, setNote, posts, setposts}) {
         </div>  
     )
 }  
-
+// visual component box to output
 function SituationOutput({note})  {
   
 //  let newNote = {note};
@@ -64,6 +64,10 @@ export default function App () {
     console.log(process.env.REACT_APP_ENDPOINT);
     const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, {
       mode: 'cors'
+    })
+    .catch(error=>{
+    console.error(error);
+    alert("failed to connect")
     });
     
     const responseData = await response.text();
