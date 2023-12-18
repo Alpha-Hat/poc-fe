@@ -63,7 +63,7 @@ export default function App () {
 
     console.log(process.env.REACT_APP_ENDPOINT);
     const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, {
-      mode: 'no-cors'
+      mode: 'cors'
     })
     .catch(error=>{
     console.error(error);
