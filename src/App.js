@@ -64,10 +64,6 @@ export default function App () {
     console.log(process.env.REACT_APP_ENDPOINT);
     const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, {
       mode: 'cors'
-    })
-    .catch(error=>{
-    console.error(error);
-    alert("failed to connect")
     });
     
     const responseData = await response.text();
@@ -99,11 +95,11 @@ export default function App () {
         posts= {posts}
         setPosts = {setPosts}
         />
-      
+      <button onClick={getApiMessage}>Call Lambda</button>
       <SituationOutput 
         note = {note}
         />
-        <button onClick={getApiMessage}>Call Lambda</button>
+        
     </div>
   );
 }
