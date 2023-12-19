@@ -96,6 +96,9 @@ export default function App () {
         setPosts = {setPosts}
         />
       <button onClick={getApiMessage}>Call Lambda</button>
+      <div>
+          {showResult && <code>{JSON.stringify(apiMessage, null, 2)}</code>}
+        </div>
       <SituationOutput 
         note = {note}
         />
