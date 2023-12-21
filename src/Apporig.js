@@ -36,14 +36,14 @@ function AddSituation ({note, setNote, posts, setposts}) {
     )
 }  
 // visual component box to output
-function SituationOutput({apiMessage})  {
+function SituationOutput({note})  {
   
 //  let newNote = {note};
   return (
     <div className="container">
       <div className="border border-primary rounded p-3 m-3">
       
-       <tbody>{<code>{JSON.stringify(apiMessage, null, 2)}</code>}</tbody> 
+       <tbody>{note}</tbody> 
         
       </div>
     </div>
@@ -100,7 +100,7 @@ export default function App () {
           {showResult && <code>{JSON.stringify(apiMessage, null, 2)}</code>}
         </div>
       <SituationOutput 
-        apiMessage = {apiMessage}
+        note = {note}
         />
         
     </div>
