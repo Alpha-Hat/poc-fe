@@ -60,11 +60,20 @@ export default function App () {
   const [apiMessage, setApiMessage] = useState("");
   
   const getApiMessage = async () => {
-
+    
+//    const data = new URLSearchParams();
+    const params = new URLSearchParams({prompt: "what is 5+5? Answer with a one word response."});
+//    data.append('what is 2+2? Answer with a one word response.');
     console.log(process.env.REACT_APP_ENDPOINT);
-    const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, {
-      mode: 'cors'
-    });
+    console.log(params.toString());
+    const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, 
+      {mode: 'cors',
+      method: 'POST',
+  	  headers: {
+  		'Content-Type': 'prompt'
+  	  },
+  	body: params
+      });
     
     const responseData = await response.text();
     console.log(responseData)
@@ -78,7 +87,7 @@ export default function App () {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          My successful switch to functions from stupid class syntax
+          Take Control of Your Financial Safety
         </p>
         <a
           className="App-link"
@@ -96,9 +105,7 @@ export default function App () {
         setPosts = {setPosts}
         />
       <button onClick={getApiMessage}>Call Lambda</button>
-      <div>
-          {showResult && <code>{JSON.stringify(apiMessage, null, 2)}</code>}
-        </div>
+      
       <SituationOutput 
         apiMessage = {apiMessage}
         />
