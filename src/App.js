@@ -61,9 +61,7 @@ export default function App () {
   
   const getApiMessage = async () => {
     
-//    const data = new URLSearchParams();
-    const params = new URLSearchParams({prompt: "what is 5+5? Answer with a one word response."});
-//    data.append('what is 2+2? Answer with a one word response.');
+//    const params = new URLSearchParams({prompt: "what is 5+5? Answer with a one word response."});
     console.log(process.env.REACT_APP_ENDPOINT);
     console.log(params.toString());
     const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, 
@@ -72,7 +70,7 @@ export default function App () {
   	  headers: {
   		'Content-Type': 'prompt'
   	  },
-  	body: params
+  	body: "what is 5+5? Answer with a one word response." //params
       });
     
     const responseData = await response.text();
