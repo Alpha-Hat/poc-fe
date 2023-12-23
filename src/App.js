@@ -63,7 +63,7 @@ export default function App () {
     
 //    const params = new URLSearchParams({prompt: "what is 5+5? Answer with a one word response."});
     console.log(process.env.REACT_APP_ENDPOINT);
-    console.log(params.toString());
+    
     const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, 
       {mode: 'cors',
       method: 'POST',
