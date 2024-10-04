@@ -53,28 +53,37 @@ export default function App() {
   const [posts, setPosts] = useState([]);
   const [showResult, setShowResult] = useState(false);
   const [apiMessage, setApiMessage] = useState("");
-
+  
+  
+  
   const getApiMessage = async () => {
+    const prompt = "what is 5+5? Answer with a one word response.";
+    console.log(process.env.REACT_APP_ENDPOINT);
+    
     try {
-      const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, {
-        mode: 'cors',
+      const response = await fetch(`${process.env.REACT_APP_ENDPOINT}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json' // Changed from 'prompt' to 'application/json'
         },
-        body: JSON.stringify({ prompt: "what is 5+5? Answer with a one word response." })
+        body: JSON.stringify({ prompt }) // Body should be a JSON object
       });
 
-      const responseData = await response.text();
+      if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+      }
+
+      const responseData = await response.json(); // Assuming the response is in JSON format
       console.log(responseData);
 
       setShowResult(true);
-      setApiMessage(responseData);
+      setApiMessage(responseData.message); // Assuming the response JSON contains a 'message' field
     } catch (error) {
-      console.error("Error fetching API message:", error);
+      console.error('There was a problem with the fetch operation:', error);
+      setApiMessage('Error: ' + error.message);
     }
   };
-
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -93,7 +102,7 @@ export default function App() {
       </header>
       <AddSituation note={note} setNote={setNote} />
       <button onClick={getApiMessage}>Call Lambda</button>
-      {showResult && <SituationOutput apiMessage={apiMessage} />}
+      <SituationOutput apiMessage={apiMessage} />
     </div>
   );
 }
