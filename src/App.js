@@ -62,6 +62,7 @@ export default function App() {
     
     try {
       const response = await fetch(`${process.env.REACT_APP_ENDPOINT}`, {
+        mode: 'cors',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json' // Changed from 'prompt' to 'application/json'
