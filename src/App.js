@@ -57,12 +57,11 @@ export default function App() {
   
   
   const getApiMessage = async () => {
-    const prompt = "what is 5+5? Answer with a one word response.";
+//blocked out to test lamba function itself    const prompt = "what is 5+5? Answer with a one word response.";
     console.log(process.env.REACT_APP_ENDPOINT);
     
     try {
       const response = await fetch(`${process.env.REACT_APP_ENDPOINT}`, {
-        mode: 'cors',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json' // Changed from 'prompt' to 'application/json'
