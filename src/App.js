@@ -60,6 +60,18 @@ export default function App() {
 //blocked out to test lamba function itself    const prompt = "what is 5+5? Answer with a one word response.";
     console.log(process.env.REACT_APP_ENDPOINT);
 
+    const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, 
+      {mode: 'cors',
+      method: 'POST',
+  	  headers: {
+  		'Content-Type': 'prompt'
+  	  },
+  	body: "what is 5+5? Answer with a one word response." //params
+      });
+    
+    const responseData = await response.text();
+    console.log(responseData)
+
   };
   
   return (
