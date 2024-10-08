@@ -2,11 +2,14 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState } from 'react';
+import AddPost from './components/addPost';
+import Post from './components/post';
+import awsconfig from './aws-exports';
 import '@aws-amplify/ui-react/styles.css';
 
 // Visual component box to Question
-function AddSituation({ note, setNote, setApiMessage }) {
-  function handleNoteChange(e) {
+function AddSituation({ note, setNote }) {
+ function handleNoteChange(e) {
     setNote(e.target.value);
   }
 
@@ -17,27 +20,26 @@ function AddSituation({ note, setNote, setApiMessage }) {
     }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, {
-        mode: 'cors',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ situation: note }),
+    const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, 
+      {mode: 'cors',
+      method: 'POST',
+  	  headers: {
+  		'Content-Type': 'prompt' //'application/json'
+  	  },
+  	body: JSON.stringify({ situation: note }),
       });
-
-      const responseData = await response.text();
+    
+    const responseData = await response.text();
 
       if (response.ok) {
         console.log('Situation added successfully');
-        setApiMessage(responseData); // Update the apiMessage state with the response
       } else {
         console.error('Failed to add situation');
       }
     } catch (error) {
       console.error('Error:', error);
     }
-
+    
     setNote(''); // Reset input field
   }
 
@@ -66,9 +68,7 @@ function SituationOutput({ apiMessage }) {
   return (
     <div className="container">
       <div className="border border-primary rounded p-3 m-3">
-        <pre>
-          <code>{JSON.stringify(apiMessage, null, 2)}</code>
-        </pre>
+        <pre><code>{JSON.stringify(apiMessage, null, 2)}</code></pre>
       </div>
     </div>
   );
@@ -76,13 +76,37 @@ function SituationOutput({ apiMessage }) {
 
 export default function App() {
   const [note, setNote] = useState('');
-  const [apiMessage, setApiMessage] = useState(''); // State for the API message
+  const [posts, setPosts] = useState([]);
+  const [showResult, setShowResult] = useState(false);
+  const [apiMessage, setApiMessage] = useState("");
+  
+  
+  
+  const getApiMessage = async () => {
+//blocked out to test lamba function itself    const prompt = "what is 5+5? Answer with a one word response.";
+    console.log(process.env.REACT_APP_ENDPOINT);
 
+    const response = await fetch(`${process.env.REACT_APP_ENDPOINT}src`, 
+      {mode: 'cors',
+      method: 'POST',
+  	  headers: {
+  		'Content-Type': 'prompt'
+  	  },
+  	body: "what is 5+5? Answer with a one word response." //params
+      });
+    
+    const responseData = await response.text();
+    console.log(responseData)
+
+  };
+  
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>Take Control of Your Financial Safety</p>
+        <p>
+          Take Control of Your Financial Safety
+        </p>
         <a
           className="App-link"
           href="https://reactjs.org"
@@ -92,10 +116,9 @@ export default function App() {
           Learn React LIKE ME!
         </a>
       </header>
-      {/* Pass setApiMessage so it can be updated when note is submitted */}
-      <AddSituation note={note} setNote={setNote} setApiMessage={setApiMessage} />
-      <SituationOutput apiMessage={apiMessage} /> {/* Pass apiMessage to display */}
+      <AddSituation note={note} setNote={setNote} />
+      <button onClick={getApiMessage}>Call Lambda</button>
+      <SituationOutput apiMessage={setNote} />
     </div>
   );
 }
-
