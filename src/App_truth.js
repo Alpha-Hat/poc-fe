@@ -3,10 +3,9 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState } from 'react';
 import '@aws-amplify/ui-react/styles.css';
-import { Line } from 'react-chartjs-2';
 
 // Visual component box to Question
-function AddSituation({ note, setNote, setApiMessage, setChartData }) {
+function AddSituation({ note, setNote, setApiMessage }) {
   function handleNoteChange(e) {
     setNote(e.target.value);
   }
@@ -27,14 +26,11 @@ function AddSituation({ note, setNote, setApiMessage, setChartData }) {
         body: JSON.stringify({ situation: note }),
       });
 
-      const responseData = await response.json();
+      const responseData = await response.text();
 
-     if (response.ok) {
+      if (response.ok) {
         console.log('Situation added successfully');
-        setApiMessage(responseData.message); // Update the apiMessage state with the recommendation message
-        if (responseData.chartData) {
-          setChartData(responseData.chartData); // Update the chartData state with the investment chart data
-        }
+        setApiMessage(responseData); // Update the apiMessage state with the response
       } else {
         console.error('Failed to add situation');
       }
@@ -78,57 +74,9 @@ function SituationOutput({ apiMessage }) {
   );
 }
 
-// Component to display a dynamic investment outcome chart
-function InvestmentChart({ chartData }) {
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: true,
-        position: 'top',
-      },
-    },
-  };
-  const data = {
-    labels: chartData ? chartData.labels : [],
-    datasets: [
-      {
-        label: 'Investment Outcome',
-        data: chartData ? chartData.values : [],
-        borderColor: 'rgba(75,192,192,1)',
-        backgroundColor: 'rgba(75,192,192,0.2)',
-        fill: true,
-      },
-    ],
-  };
-
-  return (
-    <div className="container">
-      {chartData ? (
-        <Line data={data} options={options} />
-      ) : (
-        <p>No data to display yet. Submit a financial situation.</p>
-      )}
-    </div>
-  );
-}
-
-function Disclaimer() {
-  return (
-    <div className="container">
-      <p>
-        <strong>Disclaimer:</strong> The investment outcomes presented are hypothetical and based on assumptions. Actual results may vary. Please consult a financial advisor.
-      </p>
-    </div>
-  );
-}
-
-
-
 export default function App() {
   const [note, setNote] = useState('');
   const [apiMessage, setApiMessage] = useState(''); // State for the API message
-  const [chartData, setChartData] = useState(null); // State for the chart data
 
   return (
     <div className="App">
@@ -147,8 +95,6 @@ export default function App() {
       {/* Pass setApiMessage so it can be updated when note is submitted */}
       <AddSituation note={note} setNote={setNote} setApiMessage={setApiMessage} />
       <SituationOutput apiMessage={apiMessage} /> {/* Pass apiMessage to display */}
-      <InvestmentChart chartData={chartData} />
-        <Disclaimer /> 
     </div>
   );
 }
