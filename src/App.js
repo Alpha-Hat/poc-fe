@@ -69,7 +69,7 @@ function AddSituation({ note, setNote, setApiMessage, setChartData }) {
 function SituationOutput({ apiMessage }) {
   return (
     <div className="container">
-      <div className="border border-primary rounded p-3 m-3">
+      <div className="border border-primary rounded p-3 m-3" style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
         <pre>
           <code>{JSON.stringify(apiMessage, null, 2)}</code>
         </pre>
