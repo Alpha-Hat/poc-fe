@@ -68,11 +68,9 @@ function AddSituation({ note, setNote, setApiMessage, setChartData }) {
 // Visual component box to output
 function SituationOutput({ apiMessage }) {
   return (
-    <div className="container">
-      <div className="border border-primary rounded p-3 m-3" style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-        <pre>
-          <code>{JSON.stringify(apiMessage, null, 2)}</code>
-        </pre>
+     <div className="container">
+      <div className="border border-primary rounded p-3 m-3" style={{ whiteSpace: 'normal', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+        {apiMessage}
       </div>
     </div>
   );
