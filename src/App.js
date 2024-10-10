@@ -87,12 +87,13 @@ function InvestmentChart({ chartData }) {
       },
     },
   };
+
   const data = {
-    labels: chartData ? chartData.labels : [],
+    labels: chartData && chartData.labels ? chartData.labels : [],
     datasets: [
       {
         label: 'Investment Outcome',
-        data: chartData ? chartData.values : [],
+        data: chartData && chartData.values ? chartData.values : [],
         borderColor: 'rgba(75,192,192,1)',
         backgroundColor: 'rgba(75,192,192,0.2)',
         fill: true,
@@ -102,7 +103,7 @@ function InvestmentChart({ chartData }) {
 
   return (
     <div className="container">
-      {chartData ? (
+      {chartData && chartData.labels && chartData.values && chartData.labels.length > 0 && chartData.values.length > 0 ? (
         <Line data={data} options={options} />
       ) : (
         <p>No data to display yet. Submit a financial situation.</p>
