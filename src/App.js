@@ -29,12 +29,20 @@ function AddSituation({ note, setNote, setApiMessage, setChartData }) {
 
       const responseData = await response.json();
 
-     if (response.ok) {
-        console.log('Situation added successfully');
-        setApiMessage(responseData.message); // Update the apiMessage state with the recommendation message
-        if (responseData.chartData) {
-          setChartData(responseData.chartData); // Update the chartData state with the investment chart data
-        }
+    if (response.ok) {
+      console.log('Situation added successfully');
+      setApiMessage(responseData.message); // Update the apiMessage state with the recommendation message
+
+      // Validate and set chartData
+      if (responseData.chartData && responseData.chartData.labels && responseData.chartData.values) {
+        setChartData({
+          labels: responseData.chartData.labels,
+          values: responseData.chartData.values,
+        });
+      } else {
+        console.error('Invalid chart data format');
+        setChartData(null); // Set to null if data is invalid
+      }
       } else {
         console.error('Failed to add situation');
       }
