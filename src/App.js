@@ -160,7 +160,7 @@ export default function App() {
         </a>
       </header>
       {/* Pass setApiMessage so it can be updated when note is submitted */}
-      <AddSituation note={note} setNote={setNote} setApiMessage={setApiMessage} />
+      <AddSituation note={note} setNote={setNote} setApiMessage={setApiMessage} setChartData={setChartData} />
       <SituationOutput apiMessage={apiMessage} /> {/* Pass apiMessage to display */}
       <InvestmentChart chartData={chartData} />
         <Disclaimer /> 
