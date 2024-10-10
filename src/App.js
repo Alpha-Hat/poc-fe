@@ -34,7 +34,7 @@ function AddSituation({ note, setNote, setApiMessage, setChartData }) {
       setApiMessage(responseData.message); // Update the apiMessage state with the recommendation message
 
       // Validate and set chartData
-      console.log("chartData before setting:", chartData);
+      console.log("chartData before setting:", responseData.chartData);
     if (
         responseData.chartData &&
         Array.isArray(responseData.chartData.labels) &&
