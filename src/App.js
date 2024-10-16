@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState } from 'react';
 import '@aws-amplify/ui-react/styles.css';
 import { Line } from 'react-chartjs-2';
+import { v4 as uuidv4 } from 'uuid';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -27,7 +28,7 @@ ChartJS.register(
 );
 
 // Visual component box to Question
-function AddSituation({ note, setNote, setApiMessage, setChartData }) {
+function AddSituation({ note, setNote, setApiMessage, setChartData, sessionId }) {
   function handleNoteChange(e) {
     setNote(e.target.value);
   }
@@ -44,6 +45,7 @@ function AddSituation({ note, setNote, setApiMessage, setChartData }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'session-id': sessionId,  // Pass the session_id in the headers
         },
         body: JSON.stringify({ situation: note }),
       });
@@ -165,7 +167,14 @@ export default function App() {
   const [note, setNote] = useState('');
   const [apiMessage, setApiMessage] = useState(''); // State for the API message
   const [chartData, setChartData] = useState(null); // State for the chart data
+  const [sessionId, setSessionId] = useState(''); // State to hold the session ID
 
+  // Generate and set the session ID when the app loads
+  useEffect(() => {
+    const newSessionId = uuidv4(); // Generate a new session ID
+    setSessionId(newSessionId); // Set it in the component state
+  }, [])
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -180,8 +189,8 @@ export default function App() {
           Learn React LIKE ME!
         </a>
       </header>
-      {/* Pass setApiMessage so it can be updated when note is submitted */}
-      <AddSituation note={note} setNote={setNote} setApiMessage={setApiMessage} setChartData={setChartData} />
+      {/* Pass setApiMessage, setChartData, and sessionId so they can be updated when note is submitted */}
+      <AddSituation note={note} setNote={setNote} setApiMessage={setApiMessage} setChartData={setChartData} sessionId={sessionId}  />
       <SituationOutput apiMessage={apiMessage} /> {/* Pass apiMessage to display */}
       <InvestmentChart chartData={chartData} />
         <Disclaimer /> 
