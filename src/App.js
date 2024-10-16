@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '@aws-amplify/ui-react/styles.css';
 import { Line } from 'react-chartjs-2';
 import { v4 as uuidv4 } from 'uuid';
