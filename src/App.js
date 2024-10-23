@@ -15,7 +15,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-
+   
 // Manually Register necessary components for Chart.js
 ChartJS.register(
   CategoryScale,
