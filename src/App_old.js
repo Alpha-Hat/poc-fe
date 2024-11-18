@@ -77,10 +77,18 @@ function SituationOutput({ apiMessage }) {
 export default function App() {
   const [note, setNote] = useState('');
   const [apiMessage, setApiMessage] = useState(''); // State for the API message
+  const [chartData, setChartData] = useState(null); // State for the chart data
+  const [sessionId, setSessionId] = useState(''); // State to hold the session ID
+
+  // Generate and set the session ID when the app loads
+  useEffect(() => {
+    const newSessionId = uuidv4(); // Generate a new session ID
+    setSessionId(newSessionId); // Set it in the component state
+  }, [])
 
   return (
     <div className="App">
-      <header className="App-header">
+      <header className="App-header mb-4"> {/* Add spacing below header */}
         <img src={logo} className="App-logo" alt="logo" />
         <p>Take Control of Your Financial Safety</p>
         <a
@@ -92,9 +100,43 @@ export default function App() {
           Learn React LIKE ME!
         </a>
       </header>
-      {/* Pass setApiMessage so it can be updated when note is submitted */}
-      <AddSituation note={note} setNote={setNote} setApiMessage={setApiMessage} />
-      <SituationOutput apiMessage={apiMessage} /> {/* Pass apiMessage to display */}
+      
+      {/* Create vertically stacked containers */}
+      <div className="container d-flex flex-column gap-4">
+        {/* AddSituation Component */}
+        <div className="row">
+          <div className="col-12">
+            <AddSituation 
+              note={note} 
+              setNote={setNote} 
+              setApiMessage={setApiMessage} 
+              setChartData={setChartData} 
+              sessionId={sessionId} 
+            />
+          </div>
+        </div>
+
+        {/* SituationOutput Component */}
+        <div className="row">
+          <div className="col-12">
+            <SituationOutput apiMessage={apiMessage} />
+          </div>
+        </div>
+
+        {/* InvestmentChart Component */}
+        <div className="row">
+          <div className="col-12">
+            <InvestmentChart chartData={chartData} />
+          </div>
+        </div>
+
+        {/* Disclaimer Component */}
+        <div className="row">
+          <div className="col-12">
+            <Disclaimer />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
