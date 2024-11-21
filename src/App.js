@@ -1,5 +1,13 @@
-import logo from './logo.svg';
+import logo from './logo4.svg';
 import './App.css';
+import axios from 'axios';
+import {
+  usePlaidLink,
+  PlaidLinkOptions,
+  PlaidLinkOnSuccess,
+} from 'react-plaid-link';
+import { PlaidLink } from 'react-plaid-link';
+import './PlaidLinkComponent.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useEffect } from 'react';
 //import '@aws-amplify/ui-react/styles.css';
@@ -15,6 +23,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+
    
 // Manually Register necessary components for Chart.js
 ChartJS.register(
@@ -27,6 +36,41 @@ ChartJS.register(
   Legend
 );
 
+// Plaid link
+const PlaidLinkComponent = () => {
+  const [linkToken, setLinkToken] = useState(null);
+
+  // Fetch a link token from your server (see step 2)
+  useEffect(() => {
+    const fetchLinkToken = async () => {
+      const response = await axios.get('/api/create_link_token');
+      setLinkToken(response.data.link_token);
+    };
+
+    fetchLinkToken();
+  }, []);
+
+  const handleOnSuccess = (publicToken, metadata) => {
+    // Send the public_token to your server for exchange (see step 2)
+    axios.post('/api/exchange_public_token', { public_token: publicToken })
+      .then(response => {
+        // Handle the response, such as storing the access token
+        console.log(response.data);
+      });
+  };
+
+  return (
+    <PlaidLink
+      token={linkToken}
+      onSuccess={handleOnSuccess}
+      onExit={(error, metadata) => {
+        // Handle the exit event, such as error handling
+      }}
+    >
+      Connect your bank account 
+    </PlaidLink>
+  );
+};
 // Visual component box to Question
 function AddSituation({ note, setNote, setApiMessage, setChartData, sessionId }) {
   function handleNoteChange(e) {
@@ -168,6 +212,7 @@ export default function App() {
   const [apiMessage, setApiMessage] = useState(''); // State for the API message
   const [chartData, setChartData] = useState(null); // State for the chart data
   const [sessionId, setSessionId] = useState(''); // State to hold the session ID
+  const [linkToken, setLinkTokenapiMessage] = useState(''); // State to hold the session ID
 
   // Generate and set the session ID when the app loads
   useEffect(() => {
@@ -177,11 +222,11 @@ export default function App() {
 
   return (
     <div className="App d-flex flex-row vh-100">
-      {/* Non-Title Container on the Left */}
-      <div className="bg-primary text-white p-4 d-flex flex-column justify-content-center" style={{ width: '30%' }}>
+      {/* Logo Container on the Left */}
+      <div className="App-logo text-white p-4 d-flex flex-column justify-content-center" style={{ width: '30%' }}>
         <img src={logo} className="App-logo mb-3" alt="logo" />
-        <p className="fs-4">Discover insights about your financial safety.</p>
-        <p>Use our tools to understand and optimize your financial decisions.</p>
+        <p className="fs-4">Take Charge of Your Own Financial Security</p>
+        <p className="fs-4">Use our tools to understand and optimize your financial decisions</p>
       </div>
 
       {/* Main Content on the Right */}
@@ -215,6 +260,15 @@ export default function App() {
         Actual results may vary.
         </p>
         </div>
+      {/* Plaid Link Component */}
+      <div className="card shadow-sm p-4">
+          <h2 className="text-primary">Finance Connect</h2>
+          <PlaidLinkComponent 
+            linkToken={linkToken} 
+            setLinkTokenapiMessage={setLinkTokenapiMessage} 
+          />
+        </div>
+        
       </div>
     </div>
   );
