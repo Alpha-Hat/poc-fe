@@ -1,16 +1,8 @@
-import logo from './logo4.svg';
+import logo from './logo.svg';
 import './App.css';
-import axios from 'axios';
-import {
-  usePlaidLink,
-  PlaidLinkOptions,
-  PlaidLinkOnSuccess,
-} from 'react-plaid-link';
-import { PlaidLink } from 'react-plaid-link';
-import './PlaidLinkComponent.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useState, useEffect } from 'react';
-//import '@aws-amplify/ui-react/styles.css';
+import React, { useState } from 'react';
+import '@aws-amplify/ui-react/styles.css';
 import { Line } from 'react-chartjs-2';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -24,7 +16,6 @@ import {
   Legend,
 } from 'chart.js';
 
-   
 // Manually Register necessary components for Chart.js
 ChartJS.register(
   CategoryScale,
@@ -36,43 +27,8 @@ ChartJS.register(
   Legend
 );
 
-// Plaid link
-const PlaidLinkComponent = () => {
-  const [linkToken, setLinkToken] = useState(null);
-
-  // Fetch a link token from your server (see step 2)
-  useEffect(() => {
-    const fetchLinkToken = async () => {
-      const response = await axios.get('/api/create_link_token');
-      setLinkToken(response.data.link_token);
-    };
-
-    fetchLinkToken();
-  }, []);
-
-  const handleOnSuccess = (publicToken, metadata) => {
-    // Send the public_token to your server for exchange (see step 2)
-    axios.post('/api/exchange_public_token', { public_token: publicToken })
-      .then(response => {
-        // Handle the response, such as storing the access token
-        console.log(response.data);
-      });
-  };
-
-  return (
-    <PlaidLink
-      token={linkToken}
-      onSuccess={handleOnSuccess}
-      onExit={(error, metadata) => {
-        // Handle the exit event, such as error handling
-      }}
-    >
-      Connect your bank account 
-    </PlaidLink>
-  );
-};
 // Visual component box to Question
-function AddSituation({ note, setNote, setApiMessage, setChartData, sessionId }) {
+function AddSituation({ note, setNote, setApiMessage, setChartData }) {
   function handleNoteChange(e) {
     setNote(e.target.value);
   }
@@ -89,7 +45,6 @@ function AddSituation({ note, setNote, setApiMessage, setChartData, sessionId })
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'session-id': sessionId,  // Pass the session_id in the headers
         },
         body: JSON.stringify({ situation: note }),
       });
@@ -130,7 +85,7 @@ function AddSituation({ note, setNote, setApiMessage, setChartData, sessionId })
 
   return (
     <div className="container p-3">
-      <div className="input-group mb-3 p-3"  style={{ whiteSpace: 'normal', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+      <div className="input-group mb-3 p-3">
         <input
           type="text"
           className="form-control form-control-lg"
@@ -152,7 +107,7 @@ function AddSituation({ note, setNote, setApiMessage, setChartData, sessionId })
 function SituationOutput({ apiMessage }) {
   return (
      <div className="container">
-      <div className=" p-3 m-3" style={{ whiteSpace: 'normal', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+      <div className="border border-primary rounded p-3 m-3" style={{ whiteSpace: 'normal', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
         {apiMessage}
       </div>
     </div>
@@ -211,67 +166,27 @@ export default function App() {
   const [note, setNote] = useState('');
   const [apiMessage, setApiMessage] = useState(''); // State for the API message
   const [chartData, setChartData] = useState(null); // State for the chart data
-  const [sessionId, setSessionId] = useState(''); // State to hold the session ID
-  const [linkToken, setLinkTokenapiMessage] = useState(''); // State to hold the session ID
-
-  // Generate and set the session ID when the app loads
-  useEffect(() => {
-    const newSessionId = uuidv4(); // Generate a new session ID
-    setSessionId(newSessionId); // Set it in the component state
-  }, []);
 
   return (
-    <div className="App d-flex flex-row vh-100">
-      {/* Logo Container on the Left */}
-      <div className="App-logo text-white p-4 d-flex flex-column justify-content-center" style={{ width: '30%' }}>
-        <img src={logo} className="App-logo mb-3" alt="logo" />
-        <p className="fs-4">Take Charge of Your Own Financial Security</p>
-        <p className="fs-4">Use our tools to understand and optimize your financial decisions</p>
-      </div>
-
-      {/* Main Content on the Right */}
-      <div className="d-flex flex-column flex-grow-1 gap-4 p-4">
-        {/* AddSituation Component */}
-        <div className="card shadow-sm p-4">
-          <h2 className="text-primary">Add Your Financial Situation</h2>
-          <AddSituation
-            note={note}
-            setNote={setNote}
-            setApiMessage={setApiMessage}
-            setChartData={setChartData}
-            sessionId={sessionId}
-          />
-        </div>
-
-        {/* SituationOutput Component */}
-        <div className="card shadow-sm p-4">
-          <h2 className="text-primary">Situation Output</h2>
-          <SituationOutput apiMessage={apiMessage} />
-        </div>
-
-        {/* InvestmentChart Component */}
-        <div className="card shadow-sm p-4">
-          <h2 className="text-primary">Investment Outcome Chart</h2>
-          <InvestmentChart chartData={chartData} />
-        
-        {/* Small Print Disclaimer */}
-        <p className="text-muted mt-3" style={{ fontSize: '0.9rem' }}>
-        <strong>Disclaimer:</strong> The investment outcomes presented are hypothetical and based on assumptions.
-        Actual results may vary.
-        </p>
-        </div>
-      {/* Plaid Link Component */}
-      <div className="card shadow-sm p-4">
-          <h2 className="text-primary">Finance Connect</h2>
-          <PlaidLinkComponent 
-            linkToken={linkToken} 
-            setLinkTokenapiMessage={setLinkTokenapiMessage} 
-          />
-        </div>
-        
-      </div>
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>Take Control of Your Financial Safety</p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React LIKE ME!
+        </a>
+      </header>
+      {/* Pass setApiMessage so it can be updated when note is submitted */}
+      <AddSituation note={note} setNote={setNote} setApiMessage={setApiMessage} setChartData={setChartData} />
+      <SituationOutput apiMessage={apiMessage} /> {/* Pass apiMessage to display */}
+      <InvestmentChart chartData={chartData} />
+        <Disclaimer /> 
     </div>
   );
 }
-
 

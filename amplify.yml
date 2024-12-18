@@ -7,8 +7,6 @@ frontend:
     build:
       commands:
         - echo "REACT_APP_ENDPOINT=$ENDPOINT" >> .env 
-        - echo "REACT_APP_FINENDPOINT=$ENDPOINT_FINANCIALS" >> .env
-        - echo "REACT_APP_MARKETENDPOINT=$ENDPOINT_MARKET" >> .env
         - echo $secretfile >> ./src/aws-exports.js
         - npm run build
   artifacts:
